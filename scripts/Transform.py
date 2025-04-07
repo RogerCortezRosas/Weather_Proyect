@@ -1,4 +1,4 @@
-from pyspark.sql import SparkSession
+#import pymysql
 from airflow.models.baseoperator import BaseOperator
 from datetime import datetime , date
 import pandas as pd
@@ -64,3 +64,16 @@ class Transform(BaseOperator):
             df.fillna(0, inplace=True)  # Cambiar NaN a 0
             dataframes[key] = df
       
+      #Save the dataframes in the data warehouse
+        for key,df in dataframes.items():
+            key = key+'_WH'
+            try:
+                df.to_sql(key,con=engine,if_exists='append',index=False)
+                return print("Conexión y insercion exitosa a la base de datos RDS MySQL")
+
+            
+            except Exception as e:
+                print(f"Error al conectar a la base de datos: {e}")
+            finally:
+                if engine:
+                    engine.dispose()
