@@ -14,6 +14,7 @@ services:
     volumes:
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
+      - ./scripts:/opt/airflow/scripts
       - ./plugins:/opt/airflow/plugins
     depends_on:
       mysql:
@@ -25,7 +26,7 @@ services:
       retries: 3
     command: >
       bash -c "
-      pip install --no-cache-dir apache-airflow-providers-mysql==5.3.1 pandas==2.0.3 pyspark==3.5.0 mysql-connector-python &&
+      pip install --no-cache-dir apache-airflow-providers-mysql==5.3.1 pandas==2.0.3 pyspark==3.5.0 mysql-connector-python  pymysql==1.0.2 &&
       airflow db init &&
       airflow users create --username admin --password admin --firstname Admin --lastname User --role Admin --email admin@example.com &&
       (airflow scheduler & airflow webserver)

@@ -14,8 +14,8 @@ class Drop(BaseOperator):
 
     def connection(self):
         """This methos creates a connection with the  db with pandas"""
-        host = 'localhost'
-        port='3307'
+        host = 'mysql'
+        port='3306'
         user = 'airflow'
         password = 'airflow'
         db = 'airflow'

@@ -7,14 +7,14 @@ from sqlalchemy import inspect
 
 
 class Transform(BaseOperator):
-    def __init__(self,tables,**kwargs):
+    def __init__(self,tables:list,**kwargs):
         super().__init__(**kwargs)
         self.tables = tables
 
     def connection(self):
         """This methos creates a connection with the  db with pandas"""
-        host = 'localhost'
-        port='3307'
+        host = 'mysql'
+        port='3306'
         user = 'airflow'
         password = 'airflow'
         db = 'airflow'
@@ -40,11 +40,14 @@ class Transform(BaseOperator):
         #Create diccionary of the tables
 
         dataframes = {}
+        print(self.tables)
         for table in self.tables:
             if table in available_tables:  # Verify if the table exist in the database
                 dataframes[table] = pd.read_sql_table(table, engine) 
             else:
                 print(f"Warning: the table {table} does not exist in the database")
+
+        print(dataframes.keys())
 
         # Change the type of data of the datetime column to datetime
         for key,df in dataframes.items():
