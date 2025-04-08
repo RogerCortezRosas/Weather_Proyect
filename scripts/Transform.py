@@ -48,15 +48,17 @@ class Transform(BaseOperator):
                 print(f"Warning: the table {table} does not exist in the database")
 
         print(dataframes.keys())
+    
 
         # Change the type of data of the datetime column to datetime
         for key,df in dataframes.items():
+            
             if 'datetime' in df.columns:
                 df['datetime'] = pd.to_datetime(df['datetime'], errors='coerce')
                 df.dropna(subset=['datetime'], inplace=True)  # Eliminate rows with Nat values
                 df['datetime'] = df['datetime'].dt.strftime('%Y-%m-%d %H:%M:%S')  # change the format to YYYY-MM-DD
                 dataframes[key] = df  # Actualizar el DataFrame en el diccionario
-
+             
         #Eliminate the duplicated rows
         for key,df in dataframes.items():
             df.drop_duplicates(subset=['datetime'], inplace=True)  # Eliminar duplicados basados en la columna 'datetime'
@@ -68,15 +70,19 @@ class Transform(BaseOperator):
             dataframes[key] = df
       
       #Save the dataframes in the data warehouse
-        for key,df in dataframes.items():
-            key = key+'_WH'
-            try:
-                df.to_sql(key,con=engine,if_exists='append',index=False)
-                return print("Conexión y insercion exitosa a la base de datos RDS MySQL")
+        try:
+            for key,df in dataframes.items():
+                
+                key = key+'_WH'
+                print(key)
+                try:
+                    df.to_sql(key,con=engine,if_exists='append',index=False)
+                   
+                    print(f"Conexión y insercion exitosa de la tabla {key} la base de datos RDS MySQL")
 
-            
-            except Exception as e:
-                print(f"Error al conectar a la base de datos: {e}")
-            finally:
-                if engine:
+                
+                except Exception as e:
+                    print(f"Error al conectar a la base de datos: {e}")
+        finally:
+            if engine:
                     engine.dispose()

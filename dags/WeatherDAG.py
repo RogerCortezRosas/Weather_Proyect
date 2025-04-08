@@ -31,20 +31,25 @@ with DAG(dag_id='Weather_ETL',description='This dag is to extract , transform an
         conn_id= 'mysql_conn',
         sql=" SELECT COUNT(*) FROM humidity WHERE id> (SELECT MAX(id) FROM humidity) -10",
         mode = 'poke',
-        timeout = 600,
-        poke_interval = 30 )
+        timeout = 300,
+        poke_interval = 30 ,depends_on_past=False,)
     #Task3: Get data from the datalake and transform it with pandas an then load it in the data warehouse
-    Transform_pandas = Transform(task_id = 'Transform_data',tables=['temperature','humidity','wind_speed'],depends_on_past=True)
+    Transform_pandas = Transform(task_id = 'Transform_data',tables=['temperature','humidity','wind_speed'],depends_on_past=False)
 
     #Task4: Get data from the data base and transform it with pyspark and then load it in the data warehouse
-    #Transform_pyspark = TransformPyspark(task_id = 'Transform_data_pyspark',tables=['pressure','weather_description','wind_direction'],depend_on_past=True)
+    Transform_pyspark = TransformPyspark(task_id = 'Transform_data_pyspark',tables=['pressure','weather_description','wind_direction'],depends_on_past=True)
 
     #Task5 : Eliminate data from the datalake
-    Eliminate_data = Drop(task_id = 'Eliminate_data',tables=['temperature','humidity','wind_speed','pressure','weather_description','wind_direction'],depends_on_past=True)
+    Eliminate_data_1 = Drop(task_id = 'Eliminate_data',tables=['temperature','humidity','wind_speed','pressure','weather_description','wind_direction'],depends_on_past=False)
+
+    #Task6 : Eliminate data from the datalake
+    Eliminate_data_2 = Drop(task_id = 'Eliminate_data',tables=['pressure','weather_description','wind_direction'],depends_on_past=False)
 
 
-    extract >> check_new_data >> Transform_pandas >> Eliminate_data
+    extract >> check_new_data >> [Transform_pandas,Transform_pyspark] 
 
+    Transform_pandas >> Eliminate_data_1
+    Transform_pyspark >> Eliminate_data_2
 
 
 
