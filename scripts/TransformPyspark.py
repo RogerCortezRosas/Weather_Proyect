@@ -19,7 +19,7 @@ class Transform(BaseOperator):
         # Create a SparkSession
         try:
              spark = SparkSession.builder.appName("WeatherProyect").getOrCreate()
-             df = spark.read.format("jdbc").option("url","jdbc:mysql://localhost:3307/airflow")\
+             df = spark.read.format("jdbc").option("url","jdbc:mysql://mysql:3306/airflow")\
             .option("dbtable",tabla)\
             .option("user","airflow")\
             .option("password","airflow")\
@@ -40,7 +40,7 @@ class Transform(BaseOperator):
             # Create a SparkSession
             spark = SparkSession.builder.appName("WeatherProyect").getOrCreate()
             df.write.format("jdbc")\
-            .option("url","jdbc:mysql://localhost:3307/airflow")\
+            .option("url","jdbc:mysql://mysql:3306/airflow")\
             .option("driver","com.mysql.cj.jdbc.Driver")\
             .option("dbtable",tabla)\
             .option("user","airflow")\
@@ -59,17 +59,26 @@ class Transform(BaseOperator):
 
         """This method is used to transform the data from the db and the save in a datawarehouse"""
 
-        url = "jdbc:mysql://localhost:3306/mi_base"
+        url = "jdbc:mysql://mysql:3306/airflow"
         properties = {
                         "user": "airflow",
                         "password": "airflow",
                         "driver": "com.mysql.cj.jdbc.Driver"
                 }
-        query = "(SELECT table_name FROM information_schema.tables WHERE table_schema = 'mi_base') AS tabla_listado"
-        spark = SparkSession.builder.appName("WeatherProyect").getOrCreate()
+        query = "(SELECT table_name FROM information_schema.tables WHERE table_schema = 'airflow') AS tabla_listado"
+        spark = SparkSession.builder.appName("WeatherProyect")\
+                                    .config("spark.driver.memory", "1g")\
+                                    .config("spark.executor.memory", "1g")\
+                                    .config("spark.sql.execution.arrow.pyspark.enabled", "true")\
+                                    .config("spark.jars", "/usr/share/java/mysql-connector-java.jar").getOrCreate()
+                                    
+        
+        
         df_tablas = spark.read.jdbc(url=url, table=query, properties=properties)
 
         available_tables = [fila["table_name"] for fila in df_tablas.collect()]
+
+        print(f"Available tables: {available_tables}")
 
        
         #Create diccionary of the tables
@@ -97,14 +106,16 @@ class Transform(BaseOperator):
             dataframes[key] = df
       
       #Save the dataframes in the data warehouse
-        for key,df in dataframes.items():
-            key = key+'_WH'
-            try:
-                self.load(key,df)
-                return print("Conexión y insercion exitosa a la base de datos RDS MySQL")
+        try:
+            for key,df in dataframes.items():
+                key = key+'_WH'
+                try:
+                    self.load(key,df)
+                    print("Conexión y insercion exitosa a la base de datos RDS MySQL")
 
-            
-            except Exception as e:
-                print(f"Error al conectar a la base de datos: {e}")
-            finally:
+                
+                except Exception as e:
+                    print(f"Error al conectar a la base de datos: {e}")
+        finally:
                    spark.stop() # Stop the Spark session after use
+       

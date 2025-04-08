@@ -29,7 +29,7 @@ with DAG(dag_id='Weather_ETL',description='This dag is to extract , transform an
     check_new_data = SqlSensor(
         task_id = 'check_new_data',
         conn_id= 'mysql_conn',
-        sql=" SELECT COUNT(*) FROM humidity WHERE id> (SELECT MAX(id) FROM humidity) -10",
+        sql=" SELECT COUNT(*) FROM pressure WHERE id> (SELECT MAX(id) FROM pressure) -10",
         mode = 'poke',
         timeout = 300,
         poke_interval = 30 ,depends_on_past=False,)
@@ -40,16 +40,16 @@ with DAG(dag_id='Weather_ETL',description='This dag is to extract , transform an
     Transform_pyspark = TransformPyspark(task_id = 'Transform_data_pyspark',tables=['pressure','weather_description','wind_direction'],depends_on_past=True)
 
     #Task5 : Eliminate data from the datalake
-    Eliminate_data_1 = Drop(task_id = 'Eliminate_data',tables=['temperature','humidity','wind_speed','pressure','weather_description','wind_direction'],depends_on_past=False)
+    Delete_Pandas = Drop(task_id = 'Delete_Pandas',tables=['temperature','humidity','wind_speed'],depends_on_past=False)
 
     #Task6 : Eliminate data from the datalake
-    Eliminate_data_2 = Drop(task_id = 'Eliminate_data',tables=['pressure','weather_description','wind_direction'],depends_on_past=False)
+    Delete_Pysapark = Drop(task_id = 'Delete_Pysapark',tables=['pressure','weather_description','wind_direction'],depends_on_past=False)
 
 
     extract >> check_new_data >> [Transform_pandas,Transform_pyspark] 
 
-    Transform_pandas >> Eliminate_data_1
-    Transform_pyspark >> Eliminate_data_2
+    Transform_pandas >> Delete_Pandas
+    Transform_pyspark >> Delete_Pysapark
 
 
 
