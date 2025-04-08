@@ -13,6 +13,7 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 from scripts.Transform import Transform
 from scripts.TransformPyspark import Transform as TransformPyspark
+from scripts.Drop import Drop
 
 
 with DAG(dag_id='Weather_ETL',description='This dag is to extract , transform and load the date from the API of weather',
@@ -34,10 +35,15 @@ with DAG(dag_id='Weather_ETL',description='This dag is to extract , transform an
     Transform_pandas = Transform(task_id = 'Transform_data',tables=['temperature','humidity','wind_speed'],depend_on_past=True)
 
     #Task4: Get data from the data base and transform it with pyspark and then load it in the data warehouse
-    Transform_pyspark = TransformPyspark(task_id = 'Transform_data_pyspark',tables=['temperature','humidity','wind_speed'],depend_on_past=True)
+    #Transform_pyspark = TransformPyspark(task_id = 'Transform_data_pyspark',tables=['pressure','weather_description','wind_direction'],depend_on_past=True)
 
     #Task5 : Eliminate data from the datalake
-    
+    Eliminate_data = Drop(task_id = 'Eliminate_data',tables=['temperature','humidity','wind_speed','pressure','weather_description','wind_direction'],depend_on_past=True)
+
+
+    extract >> check_new_data >> Transform_pandas >> Eliminate_data
+
+
 
 
 
