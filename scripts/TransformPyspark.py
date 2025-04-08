@@ -76,6 +76,8 @@ class Transform(BaseOperator):
         
         df_tablas = spark.read.jdbc(url=url, table=query, properties=properties)
 
+        print(f"COLUMNAS:{df_tablas.columns}")
+
         available_tables = [fila["table_name"] for fila in df_tablas.collect()]
 
         print(f"Available tables: {available_tables}")
