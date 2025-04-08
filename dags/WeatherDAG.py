@@ -8,9 +8,11 @@ from airflow.providers.common.sql.sensors.sql import SqlSensor
 import sys
 import os
 
+from pathlib import Path
 
-# Añade el directorio scripts al path de Python
-sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
+# Añade el directorio Proyecto/ al path de Python
+sys.path.append(str(Path(__file__).parent.parent))
+
 from scripts.Transform import Transform
 from scripts.TransformPyspark import Transform as TransformPyspark
 from scripts.Drop import Drop

@@ -6,7 +6,7 @@ from sqlalchemy import inspect
 
 
 
-class Transform(BaseOperator):
+class Drop(BaseOperator):
     def __init__(self,tables,**kwargs):
         super().__init__(**kwargs)
         self.tables = tables
