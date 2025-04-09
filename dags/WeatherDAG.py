@@ -38,7 +38,7 @@ with DAG(dag_id='Weather_ETL',description='This dag is to extract , transform an
     Transform_pandas = Transform(task_id = 'Transform_data',tables=['temperature','humidity','wind_speed'],depends_on_past=False)
 
     #Task4: Get data from the data base and transform it with pyspark and then load it in the data warehouse
-    Transform_pyspark = TransformPyspark(task_id = 'Transform_data_pyspark',tables=['pressure','weather_description','wind_direction'],depends_on_past=True,trigger_rule = TriggerRule.ALWAYS)
+    Transform_pyspark = TransformPyspark(task_id = 'Transform_data_pyspark',tables=['pressure','weather_description','wind_direction'],depends_on_past=True,trigger_rule = TriggerRule.ALL_SUCCESS)
 
     #Task5 : Eliminate data from the datalake
     Delete_Pandas = Drop(task_id = 'Delete_Pandas',tables=['temperature','humidity','wind_speed'],depends_on_past=False)

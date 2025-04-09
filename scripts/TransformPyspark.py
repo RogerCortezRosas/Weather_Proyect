@@ -27,12 +27,11 @@ class Transform(BaseOperator):
             .load()
         except Exception as e:
                 print(f"Error al conectar a la base de datos: {e}")
-        finally:
-                spark.stop()  # Stop the Spark session after use
+       
         
         return df
     
-    def load(tabla,df):
+    def load(self,tabla,df):
         """This method is used to load the data in the data warehouse"""
         # Create a connection to the database using pandas
       
@@ -50,8 +49,7 @@ class Transform(BaseOperator):
 
         except Exception as e:
                 print(f"Error al conectar a la base de datos: {e}")
-        finally:
-                spark.stop()  # Stop the Spark session after use
+        
 
 
 
@@ -78,37 +76,39 @@ class Transform(BaseOperator):
 
         print(f"COLUMNAS:{df_tablas.columns}")
 
-        available_tables = [fila["table_name"] for fila in df_tablas.collect()]
+        available_tables = [fila["TABLE_NAME"] for fila in df_tablas.collect()]
 
         print(f"Available tables: {available_tables}")
 
        
         #Create diccionary of the tables
 
-        dataframes = {}
-        for table in self.tables:
-            if table in available_tables:  # Verify if the table exist in the database
-                dataframes[table] = self.connection(table)  
-            else:
-                print(f"Warning: the table {table} does not exist in the database")
-
-        # Change the type of data of the datetime column to datetime
-        for key,df in dataframes.items():
-            if 'datetime' in df.columns:
-                dataframes[key] = df.withColumn('datetime',col('datetime').cast(DateType()))
-
-        #Eliminate the duplicated rows
-        for key,df in dataframes.items():
-            dataframes[key] = df.dropDuplicates(["datetime"])
-            
-                    
-        #Change Nan values to cero
-        for key,df in dataframes.items():
-            df = df.fillna(0)  
-            dataframes[key] = df
-      
-      #Save the dataframes in the data warehouse
         try:
+
+            dataframes = {}
+            for table in self.tables:
+                if table in available_tables:  # Verify if the table exist in the database
+                    dataframes[table] = self.connection(table)  
+                else:
+                    print(f"Warning: the table {table} does not exist in the database")
+
+            # Change the type of data of the datetime column to datetime
+            for key,df in dataframes.items():
+                if 'datetime' in df.columns:
+                    dataframes[key] = df.withColumn('datetime',col('datetime').cast(DateType()))
+
+            #Eliminate the duplicated rows
+            for key,df in dataframes.items():
+                dataframes[key] = df.dropDuplicates(["datetime"])
+                
+                        
+            #Change Nan values to cero
+            for key,df in dataframes.items():
+                df = df.fillna(0)  
+                dataframes[key] = df
+        
+        #Save the dataframes in the data warehouse
+        
             for key,df in dataframes.items():
                 key = key+'_WH'
                 try:
@@ -118,6 +118,7 @@ class Transform(BaseOperator):
                 
                 except Exception as e:
                     print(f"Error al conectar a la base de datos: {e}")
+        
         finally:
                    spark.stop() # Stop the Spark session after use
        
