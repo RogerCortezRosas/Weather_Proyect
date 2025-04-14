@@ -32,5 +32,5 @@ Con Matplotlib, Seaborn y Plotly, generamos gráficos interactivos y mapas de ca
  Se crea un pipeline automatizado que se ejecuta cuando nuevos registros son insertados en un data lake , posteriormente , se transforman y se cargan en un data warehouse ,por ultimo, si todo se cargo exitosamente se eliminan los resgistro del data lake.
 <p align="center">
   <img src="data/airflow.png" alt="Temperatura" width="45%" />
-  <img src="data/airflowLogo.png" alt="Precipitación" width="45%" />
+  <img src="data/airflowLogoM.png" alt="Precipitación" width="45%" />
 </p>
