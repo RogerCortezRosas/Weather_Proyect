@@ -34,3 +34,52 @@ Con Matplotlib, Seaborn y Plotly, generamos gráficos interactivos y mapas de ca
   <img src="data/airflowLogoM.png" alt="Temperatura" width="35%" height="300px" />
   <img src="data/airflow.png" alt="Precipitación" width="55%" height="300px"/>
 </p>
+
+- **Docker:**
+
+Se crea dos contenedores (airflow,mysql) con docker compose donde se alojaran las librerias necesarias para el proyecto
+
+<p align="center">
+  <img src="data/dockerLogo.png" alt="Temperatura" width="35%" height="300px" />
+  <img src="data/docker.png" alt="Precipitación" width="55%" height="300px"/>
+</p>
+
+- **MySql:**
+
+Se crea una base de datos donde se alojara nuestro Data Lake y nuestro Data Warehouse
+<p align="center">
+  <img src="data/MySqlLogo.png" alt="Temperatura" width="35%" height="300px" />
+  <img src="data/MySql.png" alt="Precipitación" width="55%" height="300px"/>
+</p>
+
+- **Spark:**
+
+Se utiliza pySpark para la transformacion de los datos del Data Lake
+<p align="center">
+  <img src="data/SparkLogo.png" alt="Temperatura" width="35%" height="300px" />
+  <img src="data/spark.png" alt="Precipitación" width="55%" height="300px"/>
+</p>
+
+- **Python:**
+
+Se utiliza pandas para la transformacion de los datos del Data Lake
+<p align="center">
+  <img src="data/PythonLogo.png" alt="Temperatura" width="35%" height="300px" />
+  <img src="data/python.png" alt="Precipitación" width="55%" height="300px"/>
+</p>
+
+- **Plotly:**
+
+Se utiliza plotly para para el analisis exploratorio
+<p align="center">
+  <img src="data/PlotlyLogo.png" alt="Temperatura" width="35%" height="300px" />
+  <img src="data/python.png" alt="Precipitación" width="55%" height="300px"/>
+</p>
+
+- **Power BI:**
+
+Se utiliza Power BI para para la visualizacion de los datos
+<p align="center">
+  <img src="data/PoweLogo.png" alt="Temperatura" width="35%" height="300px" />
+  <img src="data/python.png" alt="Precipitación" width="55%" height="300px"/>
+</p>
