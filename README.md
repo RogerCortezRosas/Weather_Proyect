@@ -73,7 +73,7 @@ Se utiliza pandas para la transformacion de los datos del Data Lake
 Se utiliza plotly para para el analisis exploratorio
 <p align="center">
   <img src="data/PlotlyLogo.png" alt="Temperatura" width="35%" height="300px" />
-  <img src="data/python.png" alt="Precipitación" width="55%" height="300px"/>
+  <img src="data/eda.png" alt="Precipitación" width="55%" height="300px"/>
 </p>
 
 - **Power BI:**
