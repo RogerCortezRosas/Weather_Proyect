@@ -83,3 +83,21 @@ Se utiliza Power BI para para la visualizacion de los datos
   <img src="data/PoweLogo.png" alt="Temperatura" width="35%" height="300px" />
   <img src="data/powerbi.png" alt="Precipitación" width="55%" height="300px"/>
 </p>
+
+
+ ## Ejecucion  ⚙️
+
+  - git clone https://github.com/RogerCortezRosas/Weather_Proyect.git
+  - cd Weather_Proyect
+  
+  Ejecuta el siguiente comando
+  
+  - docker-compose up --build
+
+## Contacto
+
+- Autor : Rogelio Cortez Rosas
+- linkedin:https://www.linkedin.com/in/rogelio-cortez-rosas
+- email : rcortezrosas@gmail.com
+
+
