@@ -1,4 +1,4 @@
-# Weather_Proyect
+# Climate analysis
 
 ![imagen](data/clima-tipos.jpg)
 
