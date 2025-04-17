@@ -81,5 +81,5 @@ Se utiliza plotly para para el analisis exploratorio
 Se utiliza Power BI para para la visualizacion de los datos
 <p align="center">
   <img src="data/PoweLogo.png" alt="Temperatura" width="35%" height="300px" />
-  <img src="data/python.png" alt="Precipitación" width="55%" height="300px"/>
+  <img src="data/powerbi.png" alt="Precipitación" width="55%" height="300px"/>
 </p>
